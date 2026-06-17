@@ -22,12 +22,13 @@ export async function getSession() {
     if (user.role === 'agency') {
       const agency = await Agency.findOne({ userId: user._id }).lean();
       user.agency = agency || null;
-    } else if (user.role === 'driver') {
+    } else if (user.role === 'driver' || user.role === 'coordinator') {
       const driver = await Driver.findOne({ userId: user._id }).lean();
       if (driver) {
         const agency = await Agency.findById(driver.agencyId).lean();
         driver.agencyName = agency ? agency.orgName : 'Independent';
         user.driver = driver;
+        user.agency = agency;
       }
     }
 

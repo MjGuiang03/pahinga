@@ -7,8 +7,8 @@ import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
 import {
   Building2, ArrowLeft, Mail, Phone, Calendar, Wallet,
-  Mountain, Hash, Car, BadgeCheck, AlertCircle, CheckCircle2,
-  ShieldAlert, Check, X, Users, Star,
+  Mountain, Hash, Car, BadgeCheck, AlertCircle,
+  ShieldAlert, Check, X, FileText, ExternalLink, Users,
 } from 'lucide-react';
 import Spinner from '@/components/common/Spinner';
 import ConfirmModal from '@/components/common/ConfirmModal';
@@ -49,7 +49,8 @@ function InfoRow({ icon: Icon, label, value, mono = false }) {
 export default function AgencyDetailPage() {
   const { user, isLoading: authLoading } = useAuth();
   const router = useRouter();
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id;
 
   const [actionType, setActionType]   = useState('');
   const [actionReason, setActionReason] = useState('');
@@ -208,11 +209,51 @@ export default function AgencyDetailPage() {
             <InfoRow icon={Phone}      label="Phone"             value={agency.userId?.phone} />
             <InfoRow icon={Calendar}   label="Registered On"     value={agency.createdAt ? formatShortDate(agency.createdAt) : '—'} />
             {agency.description && (
-              <div className="py-3.5">
+              <div className="py-3.5 border-b border-green-50 dark:border-dark-border">
                 <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1.5">Description</p>
                 <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{agency.description}</p>
               </div>
             )}
+
+            {/* ── Business Permit ── */}
+            <div className="py-4">
+              <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Business Permit</p>
+              {agency.businessPermit ? (
+                <div className="space-y-2">
+                  {agency.businessPermit.match(/\.(jpg|jpeg|png|webp)$/i) ? (
+                    /* Image permit */
+                    <a href={agency.businessPermit} target="_blank" rel="noopener noreferrer">
+                      <img
+                        src={agency.businessPermit}
+                        alt="Business Permit"
+                        className="w-full max-h-56 object-contain rounded-xl border border-green-100 dark:border-dark-border bg-gray-50 dark:bg-dark-surface cursor-zoom-in hover:opacity-90 transition-opacity"
+                      />
+                    </a>
+                  ) : (
+                    /* PDF permit */
+                    <div className="flex items-center gap-3 p-3 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800/30">
+                      <FileText className="w-8 h-8 text-red-500 shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-red-700 dark:text-red-400 truncate">
+                          {agency.businessPermit.split('/').pop()}
+                        </p>
+                        <p className="text-[10px] text-red-500 dark:text-red-500">PDF Document</p>
+                      </div>
+                    </div>
+                  )}
+                  <a
+                    href={agency.businessPermit}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-green-600 dark:text-green-400 hover:underline"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" /> Open / Download Permit
+                  </a>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-400 italic">No business permit uploaded yet.</p>
+              )}
+            </div>
           </div>
         </div>
 
@@ -258,10 +299,10 @@ export default function AgencyDetailPage() {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 space-y-3">
-              <Car className="w-12 h-12 text-green-200 dark:text-green-800" />
-              <p className="text-sm font-bold text-green-950 dark:text-white">No drivers yet</p>
+              <Users className="w-12 h-12 text-green-200 dark:text-green-800" />
+              <p className="text-sm font-bold text-green-950 dark:text-white">No members yet</p>
               <p className="text-xs text-gray-400 text-center max-w-xs">
-                This agency hasn't registered any drivers on the platform yet.
+                This agency hasn't registered any drivers or coordinators on the platform yet.
               </p>
             </div>
           )}

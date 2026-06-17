@@ -23,13 +23,14 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ error: 'Driver not found or access denied.' }, { status: 404 });
     }
 
-    const { name, licenseNumber, phone, status } = await request.json();
+    const { name, licenseNumber, phone, status, role } = await request.json();
 
     const updates = {};
     if (name) updates.name = name;
     if (licenseNumber) updates.licenseNumber = licenseNumber;
     if (phone) updates.phone = phone;
     if (status) updates.status = status;
+    if (role) updates.role = role;
 
     const updatedDriver = await Driver.findByIdAndUpdate(id, updates, { new: true });
 

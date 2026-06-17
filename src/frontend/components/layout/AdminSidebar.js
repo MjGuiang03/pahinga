@@ -6,7 +6,7 @@ import { useAuth } from '@/frontend/hooks/useAuth';
 import {
   ShieldCheck, LayoutDashboard, Building2, Users,
   Wallet, Star, LogOut, Sun, Moon, ChevronRight,
-  PanelLeftClose, PanelLeftOpen, Mountain,
+  PanelLeftClose, PanelLeftOpen, Mountain, Settings,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -16,6 +16,7 @@ const navItems = [
   { label: 'Users',              href: '/admin/users',     icon: Users },
   { label: 'Refund Requests',    href: '/admin/refunds',   icon: Wallet },
   { label: 'Reviews Moderation', href: '/admin/reviews',   icon: Star },
+  { label: 'Settings',           href: '/admin/settings',  icon: Settings },
 ];
 
 export default function AdminSidebar({ collapsed, onToggle }) {

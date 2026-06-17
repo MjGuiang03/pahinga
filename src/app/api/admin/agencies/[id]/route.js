@@ -7,7 +7,7 @@ import Booking from '@/backend/models/Booking';
 import { getSession } from '@/backend/lib/auth';
 
 // GET /api/admin/agencies/[id]
-// Returns full agency profile + drivers + stats for the admin drawer
+// Returns full agency profile + drivers + stats
 export async function GET(request, { params }) {
   try {
     const session = await getSession();
@@ -16,24 +16,38 @@ export async function GET(request, { params }) {
     }
 
     await dbConnect();
-    const { id } = params;
+    const { id } = await params; // Next.js 15: params is a Promise
 
-    const agency = await Agency.findById(id)
-      .populate({ path: 'userId', select: 'name email phone avatar createdAt isActive role' })
-      .lean();
+    // Try by agency _id first
+    let agency = null;
+    try {
+      agency = await Agency.findById(id)
+        .populate({ path: 'userId', select: 'name email phone avatar createdAt isActive role' })
+        .lean();
+    } catch (_) {
+      // id is not a valid ObjectId — fall through to userId lookup
+    }
+
+    // Fallback: URL may contain the User _id instead of Agency _id
+    if (!agency) {
+      agency = await Agency.findOne({ userId: id })
+        .populate({ path: 'userId', select: 'name email phone avatar createdAt isActive role' })
+        .lean();
+    }
 
     if (!agency) {
       return NextResponse.json({ error: 'Agency not found' }, { status: 404 });
     }
 
-    // Drivers under this agency (populated with their linked user account)
-    const drivers = await Driver.find({ agencyId: id })
+    // Use the resolved agency._id for all subsequent queries
+    const agencyId = agency._id;
+
+    const drivers = await Driver.find({ agencyId })
       .populate({ path: 'userId', select: 'name email isActive createdAt' })
       .lean();
 
-    // Stats
-    const listings = await Adventure.countDocuments({ agencyId: id });
-    const bookings = await Booking.find({ agencyId: id }).lean();
+    const listings = await Adventure.countDocuments({ agencyId });
+    const bookings = await Booking.find({ agencyId }).lean();
     const totalRevenue = bookings
       .filter(b => b.status === 'confirmed' || b.status === 'completed')
       .reduce((sum, b) => sum + (b.totalAmount || 0), 0);

@@ -45,38 +45,43 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Agency profile not found' }, { status: 404 });
     }
 
-    const { name, licenseNumber, phone, email } = await request.json();
+    const { name, licenseNumber, phone, email, role } = await request.json();
 
-    if (!name || !licenseNumber || !phone) {
-      return NextResponse.json({ error: 'Name, license number, and phone number are required.' }, { status: 400 });
+    if (!name || !phone || !email || (role !== 'coordinator' && !licenseNumber)) {
+      return NextResponse.json({ error: 'Name, phone number, and account email are required. Drivers must also provide a license number.' }, { status: 400 });
     }
 
-    let linkedUser = null;
-    if (email) {
-      linkedUser = await User.findOne({ email, role: 'driver' });
-      if (!linkedUser) {
-        return NextResponse.json({ error: 'No driver user account found with that email. Please ensure the driver has registered with a driver role first.' }, { status: 404 });
-      }
-
-      // Check if driver is already registered under another agency
-      const existingDriverLink = await Driver.findOne({ userId: linkedUser._id });
-      if (existingDriverLink) {
-        return NextResponse.json({ error: 'This driver account is already linked to an agency.' }, { status: 400 });
-      }
+    const linkedUser = await User.findOne({ email });
+    if (!linkedUser) {
+      return NextResponse.json({ error: `No user account found with that email. Please ensure the ${role} has registered a Pahinga account first.` }, { status: 404 });
     }
+
+    if (['admin', 'agency'].includes(linkedUser.role)) {
+      return NextResponse.json({ error: 'Cannot link an admin or agency account.' }, { status: 400 });
+    }
+
+    // Check if driver/coordinator is already registered under any agency
+    const existingDriverLink = await Driver.findOne({ userId: linkedUser._id });
+    if (existingDriverLink) {
+      return NextResponse.json({ error: `This account is already linked to an agency as a ${existingDriverLink.role}.` }, { status: 400 });
+    }
+
+    // Upgrade their user role to match their new job (using updateOne to bypass cached Mongoose enum validators)
+    await User.updateOne({ _id: linkedUser._id }, { $set: { role: role || 'driver' } });
 
     const driver = await Driver.create({
       agencyId: agency._id,
       name,
-      licenseNumber,
+      licenseNumber: licenseNumber || 'N/A',
       phone,
-      userId: linkedUser ? linkedUser._id : null,
+      role: role || 'driver',
+      userId: linkedUser._id,
       status: 'available',
     });
 
     return NextResponse.json({ message: 'Driver added successfully.', driver }, { status: 201 });
   } catch (err) {
     console.error('Create driver error:', err);
-    return NextResponse.json({ error: 'Something went wrong.' }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Something went wrong.' }, { status: 500 });
   }
 }

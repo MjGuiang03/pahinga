@@ -23,13 +23,13 @@ export default function MainLayout({ children }) {
     });
   };
 
-  // Hiker — collapsible sidebar
-  if (!isLoading && user?.role === 'hiker') {
+  // Hiker & Coordinator — collapsible sidebar
+  if (!isLoading && ['hiker', 'coordinator'].includes(user?.role)) {
     return (
       <div className="flex min-h-screen bg-gray-50 dark:bg-dark-bg">
         <HikerSidebar collapsed={sidebarCollapsed} onToggle={toggleSidebar} />
         <main
-          className="flex-1 min-h-screen overflow-y-auto transition-all duration-300"
+          className="flex-1 min-w-0 min-h-screen transition-all duration-300"
           style={{ marginLeft: sidebarCollapsed ? '64px' : '256px' }}
         >
           {children}
@@ -43,7 +43,7 @@ export default function MainLayout({ children }) {
     return (
       <div className="flex min-h-screen bg-gray-50 dark:bg-dark-bg">
         <DriverSidebar />
-        <main className="flex-1 min-h-screen overflow-y-auto ml-64">
+        <main className="flex-1 min-w-0 min-h-screen ml-64">
           {children}
         </main>
       </div>

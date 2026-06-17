@@ -306,8 +306,53 @@ function CreateOrEditListingForm() {
     return <div className="flex justify-center py-20"><Spinner className="w-10 h-10" /></div>;
   }
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image must be under 5 MB');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const uploadToast = toast.loading('Uploading image...');
+    try {
+      const res = await axios.post('/api/upload/listing', formData);
+      setImage(res.data.url);
+      toast.success('Image uploaded!', { id: uploadToast });
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Failed to upload image.', { id: uploadToast });
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+
+      {/* Listing Cover Image */}
+      <div className="space-y-1.5">
+        <label className="form-label block">Listing Cover Image</label>
+        <div className="flex items-center gap-4">
+          <div className="shrink-0 w-24 h-24 rounded-xl border-2 border-dashed border-gray-300 dark:border-dark-border flex items-center justify-center bg-gray-50 dark:bg-dark-surface overflow-hidden relative">
+            {image && image !== '🏔️' ? (
+              <img src={image} alt="Cover" className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-3xl">🏔️</span>
+            )}
+          </div>
+          <div className="flex-1 space-y-1">
+            <input 
+              type="file" 
+              accept="image/png, image/jpeg, image/webp, image/gif"
+              onChange={handleImageUpload}
+              className="block w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 cursor-pointer dark:file:bg-green-900/30 dark:file:text-green-400"
+            />
+            <p className="text-[10px] text-gray-400">Max 5MB. JPEG, PNG, WEBP, or GIF.</p>
+          </div>
+        </div>
+      </div>
 
       {/* Title */}
       <div className="space-y-1.5">

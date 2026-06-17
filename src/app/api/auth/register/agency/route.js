@@ -8,7 +8,7 @@ import { generateToken, setTokenCookie } from '@/backend/lib/auth';
 
 export async function POST(request) {
   try {
-    const { orgName, email, password, confirmPassword, contactPerson, phone, description } = await request.json();
+    const { orgName, email, password, confirmPassword, contactPerson, phone, description, businessPermit } = await request.json();
 
     if (!orgName || !email || !password || !confirmPassword || !contactPerson) {
       return NextResponse.json({ error: 'All required fields must be filled.' }, { status: 400 });
@@ -46,7 +46,9 @@ export async function POST(request) {
       orgName,
       contactPerson,
       description: description || null,
+      businessPermit: businessPermit || null,
     });
+
 
     // Notify admin(s)
     const admins = await User.find({ role: 'admin' }).select('_id');

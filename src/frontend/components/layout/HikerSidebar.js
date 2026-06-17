@@ -6,7 +6,7 @@ import { useAuth } from '@/frontend/hooks/useAuth';
 import {
   Mountain, LayoutDashboard, CalendarDays,
   Sparkles, LogOut, Sun, Moon, ChevronRight,
-  PanelLeftClose, PanelLeftOpen,
+  PanelLeftClose, PanelLeftOpen, Building2, Settings,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -14,6 +14,7 @@ const navItems = [
   { label: 'Dashboard',        href: '/hiker/dashboard',   icon: LayoutDashboard },
   { label: 'My Bookings',      href: '/hiker/bookings',    icon: CalendarDays },
   { label: 'Trip Recommender', href: '/hiker/recommender', icon: Sparkles },
+  { label: 'Settings',         href: '/hiker/settings',    icon: Settings },
 ];
 
 export default function HikerSidebar({ collapsed, onToggle }) {
@@ -119,6 +120,22 @@ export default function HikerSidebar({ collapsed, onToggle }) {
         })}
       </nav>
 
+      {/* Agency profile card — hidden when collapsed */}
+      {!collapsed && user?.agency && (
+        <div className="mx-3 mb-3 p-3 rounded-xl bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-800/30">
+          <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-500 mb-2">My Agency</p>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-800/40 text-amber-700 dark:text-amber-400 flex items-center justify-center text-xs font-bold shrink-0 select-none">
+              <Building2 className="w-4 h-4" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold text-amber-950 dark:text-amber-100 truncate">{user.agency.orgName}</p>
+              <p className="text-[10px] text-amber-700/70 dark:text-amber-400/70 truncate capitalize">{user.role}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* User profile card — hidden when collapsed */}
       {!collapsed && user && (
         <div className="mx-3 mb-3 p-3 rounded-xl bg-green-50 dark:bg-dark-surface border border-green-100 dark:border-dark-border">
@@ -134,6 +151,15 @@ export default function HikerSidebar({ collapsed, onToggle }) {
               <p className="text-xs font-bold text-green-950 dark:text-white truncate">{user.name}</p>
               <p className="text-[10px] text-gray-400 dark:text-gray-500 truncate">{user.email}</p>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Agency Avatar only when collapsed */}
+      {collapsed && user?.agency && (
+        <div className="flex justify-center mb-3">
+          <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-800/40 text-amber-700 dark:text-amber-400 flex items-center justify-center text-xs font-bold select-none" title={`Agency: ${user.agency.orgName}`}>
+            <Building2 className="w-4 h-4" />
           </div>
         </div>
       )}

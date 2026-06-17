@@ -81,7 +81,7 @@ export default function HikerDashboard() {
   const [rightCollapsed, setRightCollapsed] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && (!user || user.role !== 'hiker')) {
+    if (!authLoading && (!user || !['hiker', 'coordinator', 'driver'].includes(user.role))) {
       router.push('/login?redirect=/hiker/dashboard');
     }
   }, [user, authLoading, router]);
@@ -222,7 +222,7 @@ export default function HikerDashboard() {
       {/* ── Right panel ── */}
       {rightCollapsed ? (
         // Thin collapsed strip
-        <div className="w-10 shrink-0 sticky top-0 h-screen border-l border-green-100 dark:border-dark-border bg-white dark:bg-dark-card flex flex-col items-center py-4 gap-3">
+        <aside className="w-10 shrink-0 sticky top-0 h-screen border-l border-green-100 dark:border-dark-border bg-white dark:bg-dark-card flex flex-col items-center py-4 gap-3 z-20">
           <button
             onClick={() => setRightCollapsed(false)}
             title="Expand panel"
@@ -235,9 +235,9 @@ export default function HikerDashboard() {
               {upcomingBookings.length}
             </span>
           )}
-        </div>
+        </aside>
       ) : (
-        <div className="w-72 shrink-0 sticky top-0 h-screen border-l border-green-100 dark:border-dark-border bg-white dark:bg-dark-card flex flex-col overflow-y-auto">
+        <aside className="w-72 shrink-0 sticky top-0 h-screen border-l border-green-100 dark:border-dark-border bg-white dark:bg-dark-card flex flex-col overflow-y-auto z-20 shadow-sm">
 
         {/* Greeting */}
         <div className="p-5 border-b border-green-50 dark:border-dark-border bg-green-600 dark:bg-green-700">
@@ -452,7 +452,7 @@ export default function HikerDashboard() {
             View all my bookings
           </Link>
         </div>
-      </div>
+      </aside>
       )} {/* end right panel */}
     </div>
   );

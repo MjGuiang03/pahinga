@@ -5,8 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/frontend/hooks/useAuth';
 import {
   Building2, LayoutDashboard, Mountain, CalendarDays, Star,
-  LogOut, Sun, Moon, Users, Car, Wallet, ChevronRight,
-  PanelLeftClose, PanelLeftOpen,
+  LogOut, Sun, Moon, Users, Wallet, ChevronRight,
+  PanelLeftClose, PanelLeftOpen, Settings,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -14,11 +14,12 @@ const navItems = [
   { label: 'Dashboard',       href: '/agency/dashboard', icon: LayoutDashboard },
   { label: 'Listings',        href: '/agency/listings',  icon: Mountain },
   { label: 'Bookings',        href: '/agency/bookings',  icon: CalendarDays },
-  { label: 'Drivers',         href: '/agency/drivers',   icon: Users },
-  { label: 'Vehicles',        href: '/agency/vehicles',  icon: Car },
+  { label: 'Team & Fleet',    href: '/agency/team',      icon: Users },
   { label: 'Reviews',         href: '/agency/reviews',   icon: Star },
   { label: 'Refund Requests', href: '/agency/refunds',   icon: Wallet },
+  { label: 'Settings',        href: '/agency/settings',  icon: Settings },
 ];
+
 
 export default function AgencySidebar({ collapsed, onToggle }) {
   const pathname = usePathname();
