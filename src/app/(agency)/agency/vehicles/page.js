@@ -134,7 +134,7 @@ export default function AgencyVehiclesPage() {
   };
 
   return (
-    <div className="p-8 space-y-6 max-w-6xl mx-auto">
+    <div className="w-full min-w-0 p-4 md:p-8 space-y-6 max-w-6xl mx-auto">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -191,7 +191,7 @@ export default function AgencyVehiclesPage() {
           ))}
         </div>
       ) : (
-        <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-16 text-center max-w-md mx-auto space-y-4">
+        <div className="w-full min-w-0 bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-6 sm:p-10 md:p-16 text-center max-w-md mx-auto space-y-4">
           <Car className="w-12 h-12 text-green-200 dark:text-green-800 mx-auto" />
           <h3 className="text-lg font-bold text-green-950 dark:text-green-100">No vehicles registered yet</h3>
           <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -306,3 +306,5 @@ export default function AgencyVehiclesPage() {
     </div>
   );
 }
+
+

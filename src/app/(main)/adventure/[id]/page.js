@@ -56,8 +56,8 @@ export default function AdventureDetailPage() {
       router.push(`/login?redirect=/adventure/${id}`);
       return;
     }
-    if (user.role !== 'hiker') {
-      toast.error('Only hikers can book adventures');
+    if (!['hiker', 'coordinator', 'driver'].includes(user.role)) {
+      toast.error('Only hikers, coordinators, and drivers can book adventures');
       return;
     }
     router.push(`/hiker/book/${id}?pax=${paxCount}`);

@@ -17,7 +17,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const query = {};
 
-    if (session.role === 'hiker') {
+    if (session.role === 'hiker' || session.role === 'coordinator') {
       query.hikerId = session._id;
     } else if (session.role === 'agency') {
       const agency = await Agency.findOne({ userId: session._id });
@@ -30,7 +30,10 @@ export async function GET(request) {
       if (!driver) {
         return NextResponse.json({ error: 'Driver profile not found' }, { status: 404 });
       }
-      query.driverId = driver._id;
+      query.$or = [
+        { hikerId: session._id },
+        { driverId: driver._id }
+      ];
     } else if (session.role !== 'admin') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
@@ -75,8 +78,8 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const session = await getSession();
-    if (!session || session.role !== 'hiker') {
-      return NextResponse.json({ error: 'Unauthorized. Hiker account required.' }, { status: 401 });
+    if (!session || !['hiker', 'coordinator', 'driver'].includes(session.role)) {
+      return NextResponse.json({ error: 'Unauthorized. Hiker, coordinator, or driver account required.' }, { status: 401 });
     }
 
     await dbConnect();

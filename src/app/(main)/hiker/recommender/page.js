@@ -67,7 +67,7 @@ export default function TripRecommenderPage() {
   const recommendations = getFilteredRecommendations();
 
   return (
-    <div className="container-main py-12 max-w-4xl mx-auto flex-1 flex flex-col justify-center">
+    <div className="w-full min-w-0 container-main py-12 max-w-4xl mx-auto flex-1 flex flex-col justify-center">
       {/* Header */}
       <div className="text-center space-y-3 mb-8">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 dark:bg-dark-surface text-green-700 dark:text-green-400 text-xs font-bold select-none">
@@ -75,12 +75,12 @@ export default function TripRecommenderPage() {
           <span>Smart Match Finder</span>
         </div>
         <h1 className="text-2xl font-black text-green-950 dark:text-green-100">Find your perfect Pahinga escape</h1>
-        <p className="text-xs text-gray-500 max-w-md mx-auto">Answer three quick preferences and let our recommendation engine matching algorithm find your ideal getaway.</p>
+        <p className="w-full min-w-0 text-xs text-gray-500 max-w-md mx-auto">Answer three quick preferences and let our recommendation engine matching algorithm find your ideal getaway.</p>
       </div>
 
       {/* STEP 1: Difficulty */}
       {step === 1 && (
-        <div className="card border border-green-100 dark:border-dark-border p-8 space-y-6 max-w-xl mx-auto w-full">
+        <div className="w-full min-w-0 card border border-green-100 dark:border-dark-border p-8 space-y-6 max-w-xl mx-auto w-full">
           <div className="text-center space-y-1">
             <span className="text-[10px] font-bold text-green-600 uppercase tracking-widest">Question 1 of 3</span>
             <h2 className="text-base font-bold text-green-950 dark:text-green-100">What is your hiking skill level?</h2>
@@ -123,7 +123,7 @@ export default function TripRecommenderPage() {
 
       {/* STEP 2: Region */}
       {step === 2 && (
-        <div className="card border border-green-100 dark:border-dark-border p-8 space-y-6 max-w-xl mx-auto w-full">
+        <div className="w-full min-w-0 card border border-green-100 dark:border-dark-border p-8 space-y-6 max-w-xl mx-auto w-full">
           <div className="text-center space-y-1">
             <span className="text-[10px] font-bold text-green-600 uppercase tracking-widest">Question 2 of 3</span>
             <h2 className="text-base font-bold text-green-950 dark:text-green-100">Where do you want to explore?</h2>
@@ -166,7 +166,7 @@ export default function TripRecommenderPage() {
 
       {/* STEP 3: Budget */}
       {step === 3 && (
-        <div className="card border border-green-100 dark:border-dark-border p-8 space-y-6 max-w-xl mx-auto w-full">
+        <div className="w-full min-w-0 card border border-green-100 dark:border-dark-border p-8 space-y-6 max-w-xl mx-auto w-full">
           <div className="text-center space-y-1">
             <span className="text-[10px] font-bold text-green-600 uppercase tracking-widest">Question 3 of 3</span>
             <h2 className="text-base font-bold text-green-950 dark:text-green-100">What is your target budget?</h2>
@@ -250,7 +250,7 @@ export default function TripRecommenderPage() {
               ))}
             </div>
           ) : (
-            <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-16 text-center max-w-md mx-auto space-y-4">
+            <div className="w-full min-w-0 bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-6 sm:p-10 md:p-16 text-center max-w-md mx-auto space-y-4">
               <Compass className="w-12 h-12 text-green-200 dark:text-green-800 mx-auto" />
               <h3 className="text-lg font-bold text-green-950 dark:text-green-100 font-bold">No exact matches</h3>
               <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
@@ -266,3 +266,5 @@ export default function TripRecommenderPage() {
     </div>
   );
 }
+
+

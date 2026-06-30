@@ -273,7 +273,7 @@ export default function AdminUsersPage() {
   };
 
   return (
-    <div className="p-8 space-y-6 max-w-6xl mx-auto">
+    <div className="w-full min-w-0 p-4 md:p-8 space-y-6 max-w-6xl mx-auto">
 
       {/* Header */}
       <div>
@@ -422,7 +422,7 @@ export default function AdminUsersPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-16 text-center space-y-3">
+        <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-6 sm:p-10 md:p-16 text-center space-y-3">
           <Users className="w-10 h-10 text-green-200 dark:text-green-800 mx-auto" />
           <p className="text-sm font-bold text-green-950 dark:text-white">
             No {TABS.find(t => t.key === activeTab)?.label} found
@@ -457,3 +457,6 @@ export default function AdminUsersPage() {
     </div>
   );
 }
+
+
+

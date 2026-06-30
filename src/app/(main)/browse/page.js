@@ -227,7 +227,7 @@ export default function BrowsePage() {
               <h4 className="text-base font-bold text-green-900 dark:text-green-100 mb-1">
                 No adventures match your filters
               </h4>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 max-w-sm mx-auto">
+              <p className="w-full min-w-0 text-sm text-gray-500 dark:text-gray-400 mb-4 max-w-sm mx-auto">
                 Try clearing some search settings or typing a different keyword to find an escape.
               </p>
               <button onClick={handleClearFilters} className="btn btn-primary btn-sm">
@@ -240,3 +240,4 @@ export default function BrowsePage() {
     </div>
   );
 }
+

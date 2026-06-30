@@ -8,6 +8,7 @@ import {
   User, Mail, Phone, Lock, Eye, EyeOff,
   Shield, Check, AlertCircle, BarChart3,
   Building2, Users as UsersIcon, Mountain, Wallet,
+  Sun, Moon, Palette,
 } from 'lucide-react';
 import Spinner from '@/components/common/Spinner';
 import { useAuth } from '@/frontend/hooks/useAuth';
@@ -35,6 +36,25 @@ export default function AdminSettingsPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
+
+  // Appearance
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains('dark'));
+  }, []);
+
+  const toggleTheme = (dark) => {
+    if (dark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      setIsDark(true);
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      setIsDark(false);
+    }
+  };
 
   // Platform overview data
   const { data: usersData } = useSWR(user ? '/api/admin/users' : null, fetcher);
@@ -102,6 +122,7 @@ export default function AdminSettingsPage() {
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'platform', label: 'Platform', icon: BarChart3 },
     { id: 'security', label: 'Security', icon: Shield },
+    { id: 'appearance', label: 'Appearance', icon: Palette },
   ];
 
   const userInitials = user?.name
@@ -120,7 +141,7 @@ export default function AdminSettingsPage() {
   ];
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-6">
+    <div className="w-full min-w-0 p-4 md:p-8 max-w-3xl mx-auto space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-black text-green-950 dark:text-white">Admin Settings</h1>
@@ -313,6 +334,44 @@ export default function AdminSettingsPage() {
           </div>
         </form>
       )}
+      {/* Appearance Tab */}
+      {activeTab === 'appearance' && (
+        <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl overflow-hidden">
+          <div className="px-6 py-4 border-b border-green-50 dark:border-dark-border bg-green-50/30 dark:bg-dark-surface/40">
+            <p className="text-xs font-black uppercase tracking-widest text-gray-400">Theme Preferences</p>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                type="button"
+                onClick={() => toggleTheme(false)}
+                className={`flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all bg-transparent cursor-pointer ${
+                  !isDark
+                    ? 'border-green-600 bg-green-50 text-green-700 dark:bg-transparent dark:text-green-500'
+                    : 'border-gray-100 dark:border-dark-border text-gray-500 hover:border-green-200 hover:bg-green-50/50 dark:hover:border-green-900/50'
+                }`}
+              >
+                <Sun className={`w-8 h-8 mb-3 ${!isDark ? 'text-green-600' : 'text-gray-400'}`} />
+                <span className="font-bold">Light Mode</span>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => toggleTheme(true)}
+                className={`flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all bg-transparent cursor-pointer ${
+                  isDark
+                    ? 'border-green-600 bg-green-900/10 text-green-400'
+                    : 'border-gray-100 dark:border-dark-border text-gray-500 hover:border-gray-300'
+                }`}
+              >
+                <Moon className={`w-8 h-8 mb-3 ${isDark ? 'text-green-500' : 'text-gray-400'}`} />
+                <span className="font-bold">Dark Mode</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+

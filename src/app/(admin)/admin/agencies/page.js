@@ -69,7 +69,7 @@ export default function AdminAgenciesPage() {
   };
 
   return (
-    <div className="p-8 space-y-6 max-w-6xl mx-auto">
+    <div className="w-full min-w-0 p-4 md:p-8 space-y-6 max-w-6xl mx-auto">
       <div>
         <h1 className="text-2xl font-black text-green-950 dark:text-white">Agencies Moderation</h1>
         <p className="text-xs text-gray-500 mt-0.5">
@@ -166,7 +166,7 @@ export default function AdminAgenciesPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-16 text-center max-w-md mx-auto space-y-4">
+        <div className="w-full min-w-0 bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-6 sm:p-10 md:p-16 text-center max-w-md mx-auto space-y-4">
           <Building2 className="w-12 h-12 text-green-200 dark:text-green-800 mx-auto" />
           <h3 className="text-lg font-bold text-green-950 dark:text-white">No agencies registered</h3>
           <p className="text-xs text-gray-500">No local guide agencies have registered yet.</p>
@@ -198,3 +198,6 @@ export default function AdminAgenciesPage() {
     </div>
   );
 }
+
+
+

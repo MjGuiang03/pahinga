@@ -5,8 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/frontend/hooks/useAuth';
 import {
   Mountain, LayoutDashboard, CalendarDays,
-  Sparkles, LogOut, Sun, Moon, ChevronRight,
-  PanelLeftClose, PanelLeftOpen, Building2, Settings,
+  Sparkles, LogOut, ChevronRight,
+  PanelLeftClose, PanelLeftOpen, Building2, Settings, Car, X,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -17,31 +17,30 @@ const navItems = [
   { label: 'Settings',         href: '/hiker/settings',    icon: Settings },
 ];
 
-export default function HikerSidebar({ collapsed, onToggle }) {
+export default function HikerSidebar({ collapsed, onToggle, mobileOpen, onMobileClose }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    setIsDark(document.documentElement.classList.contains('dark'));
-  }, []);
-
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle('dark');
-    const next = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-    localStorage.setItem('theme', next);
-    setIsDark(next === 'dark');
-  };
 
   const userInitials = user?.name
     ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
     : '?';
 
   return (
-    <aside
-      className="fixed inset-y-0 left-0 bg-white dark:bg-dark-card border-r border-green-100 dark:border-dark-border flex flex-col z-30 transition-all duration-300 overflow-hidden"
-      style={{ width: collapsed ? '64px' : '256px' }}
-    >
+    <>
+      {/* Mobile Overlay */}
+      {mobileOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-40 transition-opacity"
+          onClick={onMobileClose}
+        />
+      )}
+      
+      <aside
+        className={`fixed inset-y-0 left-0 bg-white dark:bg-dark-card border-r border-green-100 dark:border-dark-border flex flex-col z-50 transition-all duration-300 overflow-hidden transform ${
+          mobileOpen ? 'translate-x-0 w-64' : '-translate-x-full md:translate-x-0'
+        }`}
+        style={{ width: collapsed ? '64px' : '256px' }}
+      >
       {/* Brand + collapse toggle */}
       <div className="h-16 px-3 flex items-center border-b border-green-100 dark:border-dark-border shrink-0">
         {!collapsed && (
@@ -65,10 +64,19 @@ export default function HikerSidebar({ collapsed, onToggle }) {
           </div>
         )}
 
+        <div className="flex md:hidden">
+          <button
+            onClick={onMobileClose}
+            className="p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-dark-surface transition-all border-none bg-transparent cursor-pointer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
         <button
           onClick={onToggle}
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          className={`shrink-0 p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-dark-surface transition-all border-none bg-transparent cursor-pointer ${collapsed ? 'mx-auto mt-2' : 'ml-2'}`}
+          className={`hidden md:block shrink-0 p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-dark-surface transition-all border-none bg-transparent cursor-pointer ${collapsed ? 'mx-auto mt-2' : 'ml-2'}`}
           style={collapsed ? { display: 'none' } : {}}
         >
           <PanelLeftClose className="w-4 h-4" />
@@ -87,7 +95,8 @@ export default function HikerSidebar({ collapsed, onToggle }) {
       )}
 
       {/* Nav */}
-      <nav className="flex-1 px-2 py-3 space-y-0.5 overflow-y-auto overflow-x-hidden">
+      <nav className="flex-1 px-2 py-3 flex flex-col overflow-y-auto overflow-x-hidden">
+        <div className="space-y-0.5">
         {!collapsed && (
           <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-widest text-gray-300 dark:text-gray-600 select-none">
             Navigation
@@ -118,42 +127,65 @@ export default function HikerSidebar({ collapsed, onToggle }) {
             </Link>
           );
         })}
+        </div>
+
+        {/* Spacer to push cards to the bottom if there is room */}
+        <div className="flex-1 min-h-[24px]"></div>
+
+        <div className="space-y-3 pb-2 mt-4">
+        {/* Agency profile card — hidden when collapsed */}
+        {!collapsed && user?.agency && (
+          <div className="mx-1 p-3 rounded-xl bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-800/30">
+            <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-500 mb-2">My Agency</p>
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-800/40 text-amber-700 dark:text-amber-400 flex items-center justify-center text-xs font-bold shrink-0 select-none">
+                <Building2 className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-bold text-amber-950 dark:text-amber-100 truncate">{user.agency.orgName}</p>
+                <p className="text-[10px] text-amber-700/70 dark:text-amber-400/70 truncate capitalize">{user.role}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Driver profile card — hidden when collapsed */}
+        {!collapsed && user?.role === 'driver' && (
+          <div className="mx-1 p-3 rounded-xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/30">
+            <p className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-500 mb-2">Driver Portal</p>
+            <Link href="/driver/assignments" onClick={onMobileClose} className="flex items-center gap-3 no-underline group">
+              <div className="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-800/40 text-blue-700 dark:text-blue-400 flex items-center justify-center text-xs font-bold shrink-0 select-none group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 transition-colors">
+                <Car className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-bold text-blue-950 dark:text-blue-100 truncate group-hover:underline">Switch to Driver</p>
+                <p className="text-[10px] text-blue-700/70 dark:text-blue-400/70 truncate">Manage trips</p>
+              </div>
+            </Link>
+          </div>
+        )}
+        </div>
       </nav>
 
-      {/* Agency profile card — hidden when collapsed */}
-      {!collapsed && user?.agency && (
-        <div className="mx-3 mb-3 p-3 rounded-xl bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-800/30">
-          <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-500 mb-2">My Agency</p>
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-800/40 text-amber-700 dark:text-amber-400 flex items-center justify-center text-xs font-bold shrink-0 select-none">
-              <Building2 className="w-4 h-4" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold text-amber-950 dark:text-amber-100 truncate">{user.agency.orgName}</p>
-              <p className="text-[10px] text-amber-700/70 dark:text-amber-400/70 truncate capitalize">{user.role}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* User profile card — hidden when collapsed */}
-      {!collapsed && user && (
-        <div className="mx-3 mb-3 p-3 rounded-xl bg-green-50 dark:bg-dark-surface border border-green-100 dark:border-dark-border">
-          <div className="flex items-center gap-3">
-            {user.avatar ? (
-              <img src={user.avatar} alt={user.name} className="w-9 h-9 rounded-full object-cover border-2 border-green-200 dark:border-green-700 shrink-0" />
-            ) : (
-              <div className="w-9 h-9 rounded-full bg-green-600 dark:bg-green-500 text-white flex items-center justify-center text-xs font-bold shrink-0 select-none">
-                {userInitials}
+      <div className="shrink-0 mt-auto">
+        {!collapsed && user && (
+          <div className="mx-3 mb-3 p-3 rounded-xl bg-green-50 dark:bg-dark-surface border border-green-100 dark:border-dark-border">
+            <div className="flex items-center gap-3">
+              {user.avatar ? (
+                <img src={user.avatar} alt={user.name} className="w-9 h-9 rounded-full object-cover border-2 border-green-200 dark:border-green-700 shrink-0" />
+              ) : (
+                <div className="w-9 h-9 rounded-full bg-green-600 dark:bg-green-500 text-white flex items-center justify-center text-xs font-bold shrink-0 select-none">
+                  {userInitials}
+                </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-bold text-green-950 dark:text-white truncate">{user.name}</p>
+                <p className="text-[10px] text-gray-400 dark:text-gray-500 truncate">{user.email}</p>
               </div>
-            )}
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold text-green-950 dark:text-white truncate">{user.name}</p>
-              <p className="text-[10px] text-gray-400 dark:text-gray-500 truncate">{user.email}</p>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* Agency Avatar only when collapsed */}
       {collapsed && user?.agency && (
@@ -161,6 +193,15 @@ export default function HikerSidebar({ collapsed, onToggle }) {
           <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-800/40 text-amber-700 dark:text-amber-400 flex items-center justify-center text-xs font-bold select-none" title={`Agency: ${user.agency.orgName}`}>
             <Building2 className="w-4 h-4" />
           </div>
+        </div>
+      )}
+
+      {/* Driver Avatar only when collapsed */}
+      {collapsed && user?.role === 'driver' && (
+        <div className="flex justify-center mb-3">
+          <Link href="/driver/assignments" className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-800/40 text-blue-700 dark:text-blue-400 flex items-center justify-center text-xs font-bold select-none hover:bg-blue-200 dark:hover:bg-blue-800/60 transition-colors" title="Switch to Driver Portal">
+            <Car className="w-4 h-4" />
+          </Link>
         </div>
       )}
 
@@ -174,15 +215,7 @@ export default function HikerSidebar({ collapsed, onToggle }) {
       )}
 
       {/* Footer controls */}
-      <div className={`py-3 border-t border-green-100 dark:border-dark-border space-y-0.5 ${collapsed ? 'px-2' : 'px-3'}`}>
-        <button
-          onClick={toggleTheme}
-          title={isDark ? 'Light Mode' : 'Dark Mode'}
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-green-50 dark:hover:bg-dark-surface hover:text-green-700 dark:hover:text-green-300 transition-colors border-none bg-transparent cursor-pointer ${collapsed ? 'justify-center' : 'text-left'}`}
-        >
-          {isDark ? <Sun className="w-[18px] h-[18px] shrink-0" /> : <Moon className="w-[18px] h-[18px] shrink-0" />}
-          {!collapsed && <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>}
-        </button>
+      <div className={`py-3 border-t border-green-100 dark:border-dark-border space-y-0.5 shrink-0 ${collapsed ? 'px-2' : 'px-3'}`}>
         <button
           onClick={logout}
           title="Log Out"
@@ -192,6 +225,8 @@ export default function HikerSidebar({ collapsed, onToggle }) {
           {!collapsed && <span>Log Out</span>}
         </button>
       </div>
+      </div>
     </aside>
+    </>
   );
 }

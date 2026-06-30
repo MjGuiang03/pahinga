@@ -80,11 +80,11 @@ export default function Home() {
         <div className="absolute top-1/4 left-1/10 w-96 h-96 bg-green-700/20 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/10 w-96 h-96 bg-green-600/10 rounded-full blur-3xl" />
 
-        <div className="max-w-4xl mx-auto text-center z-10 space-y-8">
+        <div className="w-full min-w-0 max-w-4xl mx-auto text-center z-10 space-y-8">
           <h1 className="text-5xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight">
             Ang lunas sa araw-araw.
           </h1>
-          <p className="text-lg sm:text-xl text-green-100 max-w-2xl mx-auto font-medium">
+          <p className="w-full min-w-0 text-lg sm:text-xl text-green-100 max-w-2xl mx-auto font-medium">
             Book guided hikes, dives, and outdoor escapes with trusted local agencies across the Philippines.
           </p>
 
@@ -130,7 +130,7 @@ export default function Home() {
       <section className="relative z-20 px-6 -mt-10">
         <form
           onSubmit={handleSearch}
-          className="bg-white dark:bg-dark-card p-5 rounded-2xl shadow-modal border border-green-100 dark:border-dark-border max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 items-end"
+          className="w-full min-w-0 bg-white dark:bg-dark-card p-5 rounded-2xl shadow-modal border border-green-100 dark:border-dark-border max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 items-end"
         >
           <div className="md:col-span-4 space-y-1.5">
             <label className="form-label block">Where do you want to go?</label>
@@ -246,7 +246,7 @@ export default function Home() {
       {/* How It Works Section */}
       <section className="py-20 bg-green-50 dark:bg-dark-surface px-6">
         <div className="container-main">
-          <div className="text-center max-w-2xl mx-auto mb-16 space-y-2">
+          <div className="w-full min-w-0 text-center max-w-2xl mx-auto mb-16 space-y-2">
             <span className="text-xs font-extrabold uppercase tracking-widest text-green-600 dark:text-green-400">
               Simple steps
             </span>
@@ -357,3 +357,4 @@ export default function Home() {
     </div>
   );
 }
+

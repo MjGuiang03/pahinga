@@ -24,6 +24,9 @@
 .dark *::-webkit-scrollbar-thumb:hover { background: #4ade80; }
 
 @layer base {
+  html, body {
+    @apply overflow-x-hidden;
+  }
   body { 
     @apply font-sans bg-white text-gray-700 dark:bg-dark-bg dark:text-white antialiased; 
   }
@@ -88,8 +91,18 @@
   .modal-overlay { @apply fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 dark:bg-black/80; }
   .modal { @apply card w-full max-w-md p-6 shadow-modal; }
 
-  .container-main { @apply max-w-6xl mx-auto px-6; }
+  .container-main { @apply w-full min-w-0 max-w-6xl mx-auto px-6; }
   .page-title { @apply text-3xl font-extrabold text-green-900 dark:text-white mb-2; }
   .page-subtitle { @apply text-sm text-gray-400; }
   .divider { @apply border-none border-t border-green-100 dark:border-dark-border my-5; }
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }

@@ -488,7 +488,7 @@ export default function CreateOrEditListingPage() {
   }
 
   return (
-    <div className="p-8 space-y-6 max-w-2xl mx-auto">
+    <div className="w-full min-w-0 p-4 md:p-8 space-y-6 max-w-2xl mx-auto">
       <button onClick={() => router.push('/agency/listings')}
         className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-green-600 border-none bg-transparent cursor-pointer">
         <ArrowLeft className="w-4 h-4" />
@@ -509,3 +509,5 @@ export default function CreateOrEditListingPage() {
     </div>
   );
 }
+
+

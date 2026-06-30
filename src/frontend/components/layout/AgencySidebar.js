@@ -5,8 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/frontend/hooks/useAuth';
 import {
   Building2, LayoutDashboard, Mountain, CalendarDays, Star,
-  LogOut, Sun, Moon, Users, Wallet, ChevronRight,
-  PanelLeftClose, PanelLeftOpen, Settings,
+  LogOut, Users, Wallet, ChevronRight,
+  PanelLeftClose, PanelLeftOpen, Settings, X,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -21,31 +21,29 @@ const navItems = [
 ];
 
 
-export default function AgencySidebar({ collapsed, onToggle }) {
+export default function AgencySidebar({ collapsed, onToggle, mobileOpen, onMobileClose }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    setIsDark(document.documentElement.classList.contains('dark'));
-  }, []);
-
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle('dark');
-    const next = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-    localStorage.setItem('theme', next);
-    setIsDark(next === 'dark');
-  };
-
   const userInitials = user?.name
     ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
     : 'AG';
 
   return (
-    <aside
-      className="fixed inset-y-0 left-0 bg-white dark:bg-dark-card border-r border-green-100 dark:border-dark-border flex flex-col z-30 transition-all duration-300 overflow-hidden"
-      style={{ width: collapsed ? '64px' : '256px' }}
-    >
+    <>
+      {/* Mobile Overlay */}
+      {mobileOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-40"
+          onClick={onMobileClose}
+        />
+      )}
+
+      <aside
+        className={`fixed inset-y-0 left-0 bg-white dark:bg-dark-card border-r border-green-100 dark:border-dark-border flex flex-col z-50 transition-all duration-300 overflow-hidden transform ${
+          mobileOpen ? 'translate-x-0 w-64' : '-translate-x-full md:translate-x-0'
+        }`}
+        style={{ width: collapsed ? '64px' : '256px' }}
+      >
       {/* Brand + toggle */}
       <div className="h-16 px-3 flex items-center border-b border-green-100 dark:border-dark-border shrink-0">
         {!collapsed && (
@@ -70,10 +68,14 @@ export default function AgencySidebar({ collapsed, onToggle }) {
 
         {!collapsed && (
           <button onClick={onToggle} title="Collapse sidebar"
-            className="shrink-0 ml-2 p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-dark-surface transition-all border-none bg-transparent cursor-pointer">
+            className="hidden md:block shrink-0 ml-2 p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-dark-surface transition-all border-none bg-transparent cursor-pointer">
             <PanelLeftClose className="w-4 h-4" />
           </button>
         )}
+
+        <button onClick={onMobileClose} className="md:hidden p-1.5 rounded-lg text-gray-400 hover:text-green-600 border-none bg-transparent cursor-pointer shrink-0">
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Expand button when collapsed */}
@@ -95,6 +97,7 @@ export default function AgencySidebar({ collapsed, onToggle }) {
           const active = pathname === href || pathname.startsWith(href + '/');
           return (
             <Link key={href} href={href} title={collapsed ? label : undefined}
+              onClick={onMobileClose}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all group no-underline ${
                 collapsed ? 'justify-center' : ''
               } ${
@@ -140,11 +143,6 @@ export default function AgencySidebar({ collapsed, onToggle }) {
 
       {/* Footer */}
       <div className={`py-3 border-t border-green-100 dark:border-dark-border space-y-0.5 ${collapsed ? 'px-2' : 'px-3'}`}>
-        <button onClick={toggleTheme} title={isDark ? 'Light Mode' : 'Dark Mode'}
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-green-50 dark:hover:bg-dark-surface hover:text-green-700 dark:hover:text-green-300 transition-colors border-none bg-transparent cursor-pointer ${collapsed ? 'justify-center' : 'text-left'}`}>
-          {isDark ? <Sun className="w-[18px] h-[18px] shrink-0" /> : <Moon className="w-[18px] h-[18px] shrink-0" />}
-          {!collapsed && <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>}
-        </button>
         <button onClick={logout} title="Log Out"
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 hover:text-red-600 transition-colors border-none bg-transparent cursor-pointer ${collapsed ? 'justify-center' : 'text-left'}`}>
           <LogOut className="w-[18px] h-[18px] shrink-0" />
@@ -152,5 +150,7 @@ export default function AgencySidebar({ collapsed, onToggle }) {
         </button>
       </div>
     </aside>
+    </>
   );
 }
+

@@ -83,7 +83,7 @@ export default function AgencyRefundsPage() {
   };
 
   return (
-    <div className="p-8 space-y-6 max-w-6xl mx-auto">
+    <div className="w-full min-w-0 p-4 md:p-8 space-y-6 max-w-6xl mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-black text-green-950 dark:text-white">Refund Requests</h1>
@@ -198,7 +198,7 @@ export default function AgencyRefundsPage() {
           </div>
         </div>
       ) : (
-        <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-16 text-center space-y-3">
+        <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-6 sm:p-10 md:p-16 text-center space-y-3">
           <Wallet className="w-10 h-10 text-green-200 dark:text-green-800 mx-auto" />
           <p className="text-sm font-bold text-green-950 dark:text-white">No refund requests</p>
           <p className="text-xs text-gray-400">
@@ -234,3 +234,6 @@ export default function AgencyRefundsPage() {
     </div>
   );
 }
+
+
+

@@ -58,7 +58,7 @@ export default function MyBookingsPage() {
         </div>
 
         {/* Tab Filter */}
-        <div className="flex border-b border-green-100 dark:border-dark-border select-none">
+        <div className="flex border-b border-green-100 dark:border-dark-border select-none overflow-x-auto scrollbar-none whitespace-nowrap">
           {[
             { id: 'all', label: 'All' },
             { id: 'upcoming', label: 'Upcoming' },
@@ -157,7 +157,7 @@ export default function MyBookingsPage() {
           </div>
         ) : (
           /* Empty State */
-          <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-16 text-center max-w-md mx-auto space-y-4">
+          <div className="w-full min-w-0 bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-6 sm:p-10 md:p-16 text-center max-w-md mx-auto space-y-4">
             <Mountain className="w-12 h-12 text-green-200 dark:text-green-800 mx-auto" />
             <h3 className="text-lg font-bold text-green-950 dark:text-green-100">No bookings yet</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -172,3 +172,5 @@ export default function MyBookingsPage() {
     </div>
   );
 }
+
+

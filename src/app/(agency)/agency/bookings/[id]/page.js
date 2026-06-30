@@ -143,7 +143,7 @@ export default function AgencyBookingDetailPage() {
   const vehiclesList = vehiclesData?.vehicles || [];
 
   return (
-    <div className="p-8 space-y-6 max-w-6xl mx-auto">
+    <div className="w-full min-w-0 p-4 md:p-8 space-y-6 max-w-6xl mx-auto">
       {/* Back link */}
       <button
         onClick={() => router.push('/agency/bookings')}

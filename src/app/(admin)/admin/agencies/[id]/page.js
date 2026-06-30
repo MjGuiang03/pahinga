@@ -105,7 +105,7 @@ export default function AgencyDetailPage() {
   const { agency, drivers, stats } = data;
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-8">
+    <div className="w-full min-w-0 p-8 max-w-6xl mx-auto space-y-8">
 
       {/* Back + header */}
       <div className="space-y-4">

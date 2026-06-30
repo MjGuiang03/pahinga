@@ -165,10 +165,10 @@ export default function HikerDashboard() {
   const rows = [...staticRows, ...typeRows];
 
   return (
-    <div className="flex gap-0 min-h-screen bg-gray-50 dark:bg-dark-bg">
+    <div className="flex flex-col lg:flex-row gap-0 min-h-screen bg-gray-50 dark:bg-dark-bg">
 
       {/* ── Main column ── */}
-      <div className="flex-1 min-w-0 p-7 space-y-5">
+      <div className="flex-1 min-w-0 p-4 md:p-7 space-y-5">
 
         {/* Header + search */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -220,24 +220,24 @@ export default function HikerDashboard() {
       </div>
 
       {/* ── Right panel ── */}
-      {rightCollapsed ? (
-        // Thin collapsed strip
-        <aside className="w-10 shrink-0 sticky top-0 h-screen border-l border-green-100 dark:border-dark-border bg-white dark:bg-dark-card flex flex-col items-center py-4 gap-3 z-20">
-          <button
-            onClick={() => setRightCollapsed(false)}
-            title="Expand panel"
-            className="p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-dark-surface transition-all border-none bg-transparent cursor-pointer"
-          >
-            <PanelRightOpen className="w-4 h-4" />
-          </button>
-          {upcomingBookings.length > 0 && (
-            <span className="w-5 h-5 rounded-full bg-green-600 text-white text-[9px] font-black flex items-center justify-center">
-              {upcomingBookings.length}
-            </span>
-          )}
-        </aside>
-      ) : (
-        <aside className="w-72 shrink-0 sticky top-0 h-screen border-l border-green-100 dark:border-dark-border bg-white dark:bg-dark-card flex flex-col overflow-y-auto z-20 shadow-sm">
+      {/* Collapsed strip — Desktop only */}
+      <aside className={`hidden ${rightCollapsed ? 'lg:flex' : 'lg:hidden'} w-10 shrink-0 sticky top-0 h-screen border-l border-green-100 dark:border-dark-border bg-white dark:bg-dark-card flex-col items-center py-4 gap-3 z-20`}>
+        <button
+          onClick={() => setRightCollapsed(false)}
+          title="Expand panel"
+          className="p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-dark-surface transition-all border-none bg-transparent cursor-pointer"
+        >
+          <PanelRightOpen className="w-4 h-4" />
+        </button>
+        {upcomingBookings.length > 0 && (
+          <span className="w-5 h-5 rounded-full bg-green-600 text-white text-[9px] font-black flex items-center justify-center">
+            {upcomingBookings.length}
+          </span>
+        )}
+      </aside>
+
+      {/* Full panel — Mobile always, Desktop when expanded */}
+      <aside className={`w-full lg:w-72 lg:shrink-0 lg:sticky lg:top-0 lg:h-screen border-t lg:border-t-0 lg:border-l border-green-100 dark:border-dark-border bg-white dark:bg-dark-card flex-col overflow-y-auto z-20 shadow-sm ${rightCollapsed ? 'flex lg:hidden' : 'flex'}`}>
 
         {/* Greeting */}
         <div className="p-5 border-b border-green-50 dark:border-dark-border bg-green-600 dark:bg-green-700">
@@ -250,7 +250,7 @@ export default function HikerDashboard() {
             <button
               onClick={() => setRightCollapsed(true)}
               title="Collapse panel"
-              className="p-1.5 rounded-lg text-green-200 hover:text-white hover:bg-green-700/50 transition-all border-none bg-transparent cursor-pointer shrink-0"
+              className="hidden lg:block p-1.5 rounded-lg text-green-200 hover:text-white hover:bg-green-700/50 transition-all border-none bg-transparent cursor-pointer shrink-0"
             >
               <PanelRightClose className="w-4 h-4" />
             </button>
@@ -453,7 +453,6 @@ export default function HikerDashboard() {
           </Link>
         </div>
       </aside>
-      )} {/* end right panel */}
     </div>
   );
 }

@@ -102,7 +102,7 @@ export default function AdminDashboardPage() {
   const m = metrics;
 
   return (
-    <div className="p-8 space-y-8 max-w-6xl mx-auto">
+    <div className="w-full min-w-0 p-4 md:p-8 space-y-8 max-w-6xl mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-black text-green-950 dark:text-white">Admin Control Center</h1>
@@ -263,3 +263,5 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+
+

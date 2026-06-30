@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import AgencySidebar from '@/frontend/components/layout/AgencySidebar';
+import DashboardMobileHeader from '@/frontend/components/layout/DashboardMobileHeader';
 
 export default function AgencyLayout({ children }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('agencySidebarCollapsed');
@@ -26,12 +28,15 @@ export default function AgencyLayout({ children }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-dark-bg">
-      <AgencySidebar collapsed={collapsed} onToggle={toggleSidebar} />
-      <main
-        className="flex-1 min-h-screen overflow-y-auto transition-all duration-300"
-        style={{ marginLeft: collapsed ? '64px' : '256px' }}
-      >
+    <div className="min-h-screen bg-gray-50 dark:bg-dark-bg overflow-x-hidden">
+      <AgencySidebar
+        collapsed={collapsed}
+        onToggle={toggleSidebar}
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
+      />
+      <main className={`min-h-screen flex flex-col overflow-y-auto transition-all duration-300 ml-0 ${collapsed ? 'md:ml-16' : 'md:ml-64'}`}>
+        <DashboardMobileHeader onMenuClick={() => setMobileSidebarOpen(true)} />
         {children}
       </main>
     </div>

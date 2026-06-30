@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 const ROLE_DASHBOARDS = {
   hiker: '/hiker/dashboard',
   agency: '/agency/dashboard',
-  driver: '/driver/assignments',
+  driver: '/hiker/dashboard',
   coordinator: '/hiker/dashboard',
   admin: '/admin/dashboard',
 };

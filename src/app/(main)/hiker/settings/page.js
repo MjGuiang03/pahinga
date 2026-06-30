@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import {
   User, Mail, Phone, Lock, Eye, EyeOff,
   Shield, Check, AlertCircle, Camera,
+  Sun, Moon, Palette,
 } from 'lucide-react';
 import Spinner from '@/components/common/Spinner';
 import { useAuth } from '@/frontend/hooks/useAuth';
@@ -31,6 +32,25 @@ export default function HikerSettingsPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
+
+  // Appearance
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains('dark'));
+  }, []);
+
+  const toggleTheme = (dark) => {
+    if (dark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      setIsDark(true);
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      setIsDark(false);
+    }
+  };
 
   useEffect(() => {
     if (!authLoading && (!user || !['hiker', 'coordinator', 'driver'].includes(user.role))) {
@@ -99,6 +119,7 @@ export default function HikerSettingsPage() {
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'security', label: 'Security', icon: Shield },
+    { id: 'appearance', label: 'Appearance', icon: Palette },
   ];
 
   const userInitials = user?.name
@@ -106,7 +127,7 @@ export default function HikerSettingsPage() {
     : '?';
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-6">
+    <div className="w-full min-w-0 min-w-0 p-4 md:p-8 max-w-3xl mx-auto space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-black text-green-950 dark:text-white">Settings</h1>
@@ -120,15 +141,15 @@ export default function HikerSettingsPage() {
             {userInitials}
           </div>
         </div>
-        <div>
-          <p className="text-lg font-black text-white">{user?.name}</p>
-          <p className="text-xs text-green-200 mt-0.5">{user?.email}</p>
-          <p className="text-[10px] text-green-300 mt-1">Member since {memberSince}</p>
+        <div className="min-w-0 flex-1">
+          <p className="text-lg font-black text-white truncate">{user?.name}</p>
+          <p className="text-xs text-green-200 mt-0.5 truncate">{user?.email}</p>
+          <p className="text-[10px] text-green-300 mt-1 truncate">Member since {memberSince}</p>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-green-100 dark:border-dark-border select-none">
+      <div className="flex border-b border-green-100 dark:border-dark-border select-none overflow-x-auto scrollbar-none whitespace-nowrap">
         {tabs.map(tab => (
           <button
             key={tab.id}
@@ -278,6 +299,44 @@ export default function HikerSettingsPage() {
           </div>
         </form>
       )}
+      {/* Appearance Tab */}
+      {activeTab === 'appearance' && (
+        <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl overflow-hidden">
+          <div className="px-6 py-4 border-b border-green-50 dark:border-dark-border bg-green-50/30 dark:bg-dark-surface/40">
+            <p className="text-xs font-black uppercase tracking-widest text-gray-400">Theme Preferences</p>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                type="button"
+                onClick={() => toggleTheme(false)}
+                className={`flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all bg-transparent cursor-pointer ${
+                  !isDark
+                    ? 'border-green-600 bg-green-50 text-green-700 dark:bg-transparent dark:text-green-500'
+                    : 'border-gray-100 dark:border-dark-border text-gray-500 hover:border-green-200 hover:bg-green-50/50 dark:hover:border-green-900/50'
+                }`}
+              >
+                <Sun className={`w-8 h-8 mb-3 ${!isDark ? 'text-green-600' : 'text-gray-400'}`} />
+                <span className="font-bold">Light Mode</span>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => toggleTheme(true)}
+                className={`flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all bg-transparent cursor-pointer ${
+                  isDark
+                    ? 'border-green-600 bg-green-900/10 text-green-400'
+                    : 'border-gray-100 dark:border-dark-border text-gray-500 hover:border-gray-300'
+                }`}
+              >
+                <Moon className={`w-8 h-8 mb-3 ${isDark ? 'text-green-500' : 'text-gray-400'}`} />
+                <span className="font-bold">Dark Mode</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+

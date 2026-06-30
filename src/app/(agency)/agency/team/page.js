@@ -146,7 +146,7 @@ function DriversSection() {
           ))}
         </div>
       ) : (
-        <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-16 text-center space-y-4">
+        <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-6 sm:p-10 md:p-16 text-center space-y-4">
           <Users className="w-12 h-12 text-green-200 dark:text-green-800 mx-auto" />
           <p className="text-sm font-bold text-green-950 dark:text-white">No coordinators or drivers yet</p>
           <p className="text-xs text-gray-400">Add members to your team roster to manage trips.</p>
@@ -309,7 +309,7 @@ function VehiclesSection() {
           ))}
         </div>
       ) : (
-        <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-16 text-center space-y-4">
+        <div className="bg-white dark:bg-dark-card border border-green-100 dark:border-dark-border rounded-xl p-6 sm:p-10 md:p-16 text-center space-y-4">
           <Car className="w-12 h-12 text-green-200 dark:text-green-800 mx-auto" />
           <p className="text-sm font-bold text-green-950 dark:text-white">No vehicles yet</p>
           <p className="text-xs text-gray-400">Register your transport fleet vehicles.</p>
@@ -380,7 +380,7 @@ export default function AgencyTeamPage() {
   };
 
   return (
-    <div className="p-8 space-y-6 max-w-6xl mx-auto">
+    <div className="w-full min-w-0 p-4 md:p-8 space-y-6 max-w-6xl mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-black text-green-950 dark:text-white">Team & Fleet</h1>
@@ -419,3 +419,5 @@ export default function AgencyTeamPage() {
     </div>
   );
 }
+
+

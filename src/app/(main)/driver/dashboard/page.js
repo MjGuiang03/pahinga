@@ -68,7 +68,7 @@ export default function DriverDashboardPage() {
   const totalTrips = bookings.length;
 
   return (
-    <div className="p-8 space-y-6 max-w-4xl mx-auto">
+    <div className="w-full min-w-0 p-4 md:p-8 space-y-6 max-w-4xl mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-black text-green-950 dark:text-white">
@@ -184,3 +184,5 @@ export default function DriverDashboardPage() {
     </div>
   );
 }
+
+
